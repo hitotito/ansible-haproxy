@@ -1,0 +1,8 @@
+---
+- name: Install HAProxy
+  import_tasks: install.yml
+  tags: install
+
+- name: Install consul service definition
+  import_tasks: consul.yml
+  when: haproxy_consul_enabled
