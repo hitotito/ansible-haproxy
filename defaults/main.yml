@@ -23,4 +23,10 @@ haproxy_consul_enabled: false
 haproxy_consul_service_name: haproxy
 haproxy_consul_service_tags: []
 haproxy_consul_service_ports: ["{{ haproxy_frontend_port }}"]
-haproxy_consul_target_service: ""
+# consul_target_services must contain list of dictionaries, with following attributes:
+# {
+#   name:
+#   hdr:
+#   healthcheck:
+# }
+haproxy_consul_target_services: []
