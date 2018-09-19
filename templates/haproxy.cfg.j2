@@ -30,6 +30,10 @@ defaults
   errorfile 503 /etc/haproxy/errors/503.http
   errorfile 504 /etc/haproxy/errors/504.http
 
+frontend status-monitor
+    bind 127.0.0.1:{{ haproxy_monitor_port }}
+    monitor-uri {{ haproxy_monitor_uri }}
+
 frontend {{ haproxy_frontend_name }}
     bind {{ haproxy_frontend_bind_addr }}:{{ haproxy_frontend_port }}
     mode {{ haproxy_frontend_mode }}

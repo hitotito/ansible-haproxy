@@ -3,7 +3,7 @@ backend {{ target.name }}
     balance {{ haproxy_backend_balance_method }}
     option forwardfor
 {% if haproxy_backend_httpchk != '' %}
-    option httpchk {{ haproxy_backend_httpchk }}
+    option httpchk {{ target.httpchk | default(haproxy_backend_httpchk) }}
 {% endif %}
     cookie SERVERID insert indirect
 {{ '{{range service "'}}{{ target.name }}{{'"}}' }}

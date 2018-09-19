@@ -18,11 +18,14 @@ haproxy_backend_balance_method: roundrobin
 haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
 haproxy_backend_servers: []
 
+haproxy_monitor_port: 8001
+haproxy_monitor_uri: /
+
 # consul
 haproxy_consul_enabled: false
 haproxy_consul_service_name: haproxy
 haproxy_consul_service_tags: []
-haproxy_consul_service_ports: ["{{ haproxy_frontend_port }}"]
+haproxy_consul_service_ports: ["{{ haproxy_monitor_port }}"]
 # consul_target_services must contain list of dictionaries, with following attributes:
 # {
 #   name:
