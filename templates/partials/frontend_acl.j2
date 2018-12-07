@@ -1,5 +1,5 @@
-    # {{ target.hdr }}
-    acl host_{{ target.name }} hdr(host) -i {{ target.hdr }}
-    use_backend {{ target.name }} if host_{{ target.name }}
+    # {{ acl_target.hdr }}
+    acl host_{{ acl_target.name }} hdr(host) -i {{ acl_target.hdr }}
+    use_backend {{ acl_target.name }} if host_{{ acl_target.name }}
 
 

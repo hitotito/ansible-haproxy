@@ -38,10 +38,10 @@ frontend {{ haproxy_frontend_name }}
     bind {{ haproxy_frontend_bind_addr }}:{{ haproxy_frontend_port }}
     mode {{ haproxy_frontend_mode }}
 
-{% for target in haproxy_consul_target_services %}
+{% for acl_target in haproxy_consul_target_services %}
 {% include './templates/partials/frontend_acl.j2' %}
 {% endfor %}
 
-{% for target in haproxy_consul_target_services %}
+{% for be_target in haproxy_consul_target_services %}
 {% include './templates/partials/backend.j2' %}
 {% endfor %}

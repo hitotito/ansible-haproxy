@@ -1,12 +1,19 @@
-backend {{ target.name }}
-    mode {{ haproxy_backend_mode }}
-    balance {{ haproxy_backend_balance_method }}
+backend {{ be_target.name }}
+    mode {{ be_target.mode | default(haproxy_backend_mode) }}
+    balance {{ be_target.balance_method | default(haproxy_backend_balance_method) }}
     option forwardfor
-{% if haproxy_backend_httpchk != '' %}
-    option httpchk {{ target.httpchk | default(haproxy_backend_httpchk) }}
+{% if be_target.httpchk %}
+    option httpchk {{ be_target.httpchk | default(haproxy_backend_httpchk) }}
 {% endif %}
     cookie SERVERID insert indirect
-{{ '{{range service "'}}{{ target.name }}{{'"}}' }}
+
+{% if haproxy_consul_enabled %}
+{{ '{{range service "'}}{{ be_target.name }}{{'"}}' }}
     {{ "server {{.Node}} {{.Address}}:{{.Port}} cookie {{.Node}} check{{end}}" }}
+{% else %}
+{% for server in be_target.servers %}
+    server {{ server.name }} {{ server.address }} cookie {{ server.name }} check
+{% endfor %}
+{% endif %}
 
 

@@ -1,4 +1,12 @@
 ---
+__haproxy_backend_default:
+  name: habackend-default
+  mode: http
+  balance_method: roundrobin
+  httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
+  servers: []
+
+haproxy_backend_default_compiled: "{{ __haproxy_backend_default | combine(haproxy_backend_default) }}"
 # # consul download link & checksum
 # consul_name : "consul_{{consul_ver}}_{{consul_platform}}"
 # consul_zip: "{{ consul_name }}.zip"

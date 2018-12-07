@@ -37,16 +37,26 @@ frontend status-monitor
 frontend {{ haproxy_frontend_name }}
     bind {{ haproxy_frontend_bind_addr }}:{{ haproxy_frontend_port }}
     mode {{ haproxy_frontend_mode }}
-    default_backend {{ haproxy_backend_name }}
 
-backend {{ haproxy_backend_name }}
-    mode {{ haproxy_backend_mode }}
-    balance {{ haproxy_backend_balance_method }}
+{% for acl_target in haproxy_frontend_target_services %}
+{% include './templates/partials/frontend_acl.j2' %}
+{% endfor %}
+    default_backend {{ haproxy_backend_default.name }}
+
+{% for be_target in haproxy_backend_services %}
+{% include './templates/partials/backend.j2' %}
+{% endfor %}
+
+backend {{ haproxy_backend_default_compiled.name }}
+    mode {{ haproxy_backend_default_compiled.mode }}
+    balance {{ haproxy_backend_default_compiled.balance_method }}
     option forwardfor
-{% if haproxy_backend_httpchk != '' %}
-    option httpchk {{ haproxy_backend_httpchk }}
+{% if haproxy_backend_default_compiled.httpchk != '' %}
+    option httpchk {{ haproxy_backend_default_compiled.httpchk }}
 {% endif %}
     cookie SERVERID insert indirect
-{% for backend in haproxy_backend_servers %}
-    server {{ backend.name }} {{ backend.address }} cookie {{ backend.name }} check
+{% for server in haproxy_backend_default_compiled.servers %}
+    server {{ server.name }} {{ server.address }} cookie {{ server.name }} check
 {% endfor %}
+
+

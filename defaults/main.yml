@@ -11,17 +11,48 @@ haproxy_frontend_name: hafrontend
 haproxy_frontend_bind_addr: '*'
 haproxy_frontend_port: 80
 haproxy_frontend_mode: http
+# frontend_target_services must contain list of dictionaries, with following attributes:
+# {
+#   name: my_service
+#   hdr: www.mydomain.com
+#   healthcheck: [Not avaible yet]
+# }
+haproxy_frontend_target_services: []
 
-haproxy_backend_name: habackend
+#haproxy_backend_default.servers must be following format:
+# {
+#   name: <server_name>
+#   address: <server_address:port>
+# }
+haproxy_backend_default:
+  name: habackend-default
+  mode: http
+  balance_method: roundrobin
+  httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
+  servers: []
+
+#haproxy_backend_services have following 
+# {
+#   name: <service_name>              [REQIORED}
+#   mode: <backend_mode>              [Default: haproxy_backend_mode]
+#   balance_method: <roundrobin, etc> [Default: haproxy_backend_balance_method]
+#   httpchk: <http_check>             [Default: haproxy_backend_httpchk]
+#   servers: [{                       [REQUIRED]
+#       name: <server_name>,
+#       address: <server_address:port>
+#     }
+#   ]
+# }
+haproxy_backend_services: []
+
 haproxy_backend_mode: http
 haproxy_backend_balance_method: roundrobin
 haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
-haproxy_backend_servers: []
 
 haproxy_monitor_port: 8001
 haproxy_monitor_uri: /
 
-# consul
+# consul integration
 haproxy_consul_enabled: false
 haproxy_consul_service_name: haproxy
 haproxy_consul_service_tags: []
